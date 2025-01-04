@@ -3,8 +3,8 @@
 // https://opensource.org/licenses/mit-license.php
 
 /// Mandatory file to be able to launch SVUT flow
-`include "svut_h.sv"
-`include "bster_h.sv"
+`include "svut_h.sv"  // SVUT is a SystemVerilog Unit Test library
+`include "bster_h.sv"  // BSTer core header file
 
 `timescale 1 ns / 1 ps
 
