@@ -25,7 +25,7 @@ module bst_engine
         // Width of wstrb (width of data bus in words)
         parameter RAM_STRB_WIDTH = (RAM_DATA_WIDTH/8),
         // Width of ID signal
-        parameter RAM_ID_WIDTH = 8
+        parameter RAM_ID_WIDTH = 8 
     )(
         input  wire                        aclk,
         input  wire                        aresetn,
