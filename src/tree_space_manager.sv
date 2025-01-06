@@ -16,13 +16,13 @@ module tree_space_manager
         input  wire                      aclk,
         input  wire                      aresetn,
         input  wire                      swrst,
-        input  wire                      tree_mgt_req_valid,
+        input  wire                      tree_mgt_req_valid,  //请求可用的地址
         output wire                      tree_mgt_req_ready,
-        output wire [RAM_ADDR_WIDTH-1:0] tree_mgt_req_addr,
-        input  wire                      tree_mgt_free_valid,
+        output wire [RAM_ADDR_WIDTH-1:0] tree_mgt_req_addr,     //分配可用的地址
+        input  wire                      tree_mgt_free_valid,  //释放地址的有效信号。
         input  wire                      tree_mgt_free_is_root,
         output wire                      tree_mgt_free_ready,
-        input  wire [RAM_ADDR_WIDTH-1:0] tree_mgt_free_addr,
+        input  wire [RAM_ADDR_WIDTH-1:0] tree_mgt_free_addr,  //回收暂时不用的地址
         input  wire [    `CSR_MST_W-1:0] csr_slv,
         output wire [        `TSM_W-1:0] csr_mst
     );
