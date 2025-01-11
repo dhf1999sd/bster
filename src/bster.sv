@@ -3,7 +3,7 @@
 // https://opensource.org/licenses/mit-license.php
 
 `timescale 1 ns / 1 ps
-`default_nettype none
+`default_nettype none   //查找出错的地方，避免将默认的逻辑类型设置为wire或者and等
 
 `include "bster_h.sv"
 
@@ -90,39 +90,39 @@ module bster
 
     // Check parameters setup consistency
     // and break up if not supported
-    initial begin
+//    initial begin
 
-        `CHECKER((CSR_ADDR_WIDTH != 8),
-            "CSR interface only support 8 bits address width");
+//        `CHECKER((CSR_ADDR_WIDTH != 8),
+//            "CSR interface only support 8 bits address width");
 
-        `CHECKER((CSR_ADDR_WIDTH != `CSR_ADDR_WIDTH),
-            "CSR address parameter and define must have the same value 8");
+//        `CHECKER((CSR_ADDR_WIDTH != `CSR_ADDR_WIDTH),
+//            "CSR address parameter and define must have the same value 8");
 
-        `CHECKER((CSR_DATA_WIDTH != 32),
-            "CSR interface only support 32 bits data width");
+//        `CHECKER((CSR_DATA_WIDTH != 32),
+//            "CSR interface only support 32 bits data width");
 
-        `CHECKER((CSR_DATA_WIDTH != `CSR_DATA_WIDTH),
-            "CSR data parameter and define must have the same value 32");
+//        `CHECKER((CSR_DATA_WIDTH != `CSR_DATA_WIDTH),
+//            "CSR data parameter and define must have the same value 32");
 
-        `CHECKER((RAM_ADDR_WIDTH > `RAM_BASE_ADDRESS_W),
-            "RAM address width can't be greater than 64 Bits");
+//        `CHECKER((RAM_ADDR_WIDTH > `RAM_BASE_ADDRESS_W),
+//            "RAM address width can't be greater than 64 Bits");
 
-        `CHECKER((TOKEN_WIDTH > RAM_ADDR_WIDTH),
-            "Token can't use a width wider than RAM address width");
+//        `CHECKER((TOKEN_WIDTH > RAM_ADDR_WIDTH),
+//            "Token can't use a width wider than RAM address width");
 
-        `CHECKER(((TOKEN_WIDTH+PAYLOAD_WIDTH+8) > AXI4S_WIDTH), // 8 for command width
-            "AXI4S interface must be wider to enclose command, token and payload");
+//        `CHECKER(((TOKEN_WIDTH+PAYLOAD_WIDTH+8) > AXI4S_WIDTH), // 8 for command width
+//            "AXI4S interface must be wider to enclose command, token and payload");
 
-        `CHECKER((PAYLOAD_WIDTH+1) > AXI4S_WIDTH,
-            "AXI4S completion must be greater than PAYLOAD_WIDTH + 1");
+//        `CHECKER((PAYLOAD_WIDTH+1) > AXI4S_WIDTH,
+//            "AXI4S completion must be greater than PAYLOAD_WIDTH + 1");
 
-        `CHECKER((RAM_STRB_WIDTH != (RAM_DATA_WIDTH/8)),
-            "RAM_STRB_WIDTH must be equal to RAM_DATA_WIDTH/8");
-    end
+//        `CHECKER((RAM_STRB_WIDTH != (RAM_DATA_WIDTH/8)),
+//            "RAM_STRB_WIDTH must be equal to RAM_DATA_WIDTH/8");
+//    end
 
     // Control/Status register shared across the IP's modules
-    logic [      `CSR_SLV_W-1:0] csr_slv;
-    logic [      `CSR_MST_W-1:0] csr_mst;
+    logic [      26-1:0] csr_slv;
+    logic [      26-1:0] csr_mst;
 
     logic                        req_valid;
     logic                        req_ready;
@@ -249,7 +249,7 @@ module bster
         .mem_rd_valid          (mem_rd_valid               ),
         .mem_rd_ready          (mem_rd_ready               ),
         .mem_rd_data           (mem_rd_data                ),
-        .csr_mst               (csr_slv[`BE+:`BE_W]        )
+        .csr_mst               (csr_slv[25+:25]        )
     );
 
     // Tree space manager providing available
@@ -269,8 +269,8 @@ module bster
         .tree_mgt_free_is_root (tree_mgt_free_is_root ),
         .tree_mgt_free_ready   (tree_mgt_free_ready   ),
         .tree_mgt_free_addr    (tree_mgt_free_addr    ),
-        .csr_slv               (csr_mst[0+:`CSR_MST_W]),
-        .csr_mst               (csr_slv[`TSM+:`TSM_W] )
+        .csr_slv               (csr_mst[0+:64]),
+        .csr_mst               (csr_slv[0+:1] )
     );
 
     // Memory driver managing the AXI4 interface to

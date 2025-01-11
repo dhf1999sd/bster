@@ -130,7 +130,7 @@ module bst_engine
     // -------------------------------------------------------------------------
 
     // Accept a new command only if all FSM are IDLE
-    assign req_ready = (fsm_insert == IDLE && fsm_search == IDLE && fsm_delete == IDLE);
+    assign req_ready = (fsm_insert == IDLE && fsm_search == IDLE && fsm_delete == IDLE);//�?有状态机为IDLE时，接受新的命令
     assign engine_ready = req_ready;
 
     assign cpl_valid = (fsm_insert == REQ_COMPLETION) ? cpl_valid_insert :
@@ -254,14 +254,13 @@ module bst_engine
     .req_ready           (req_ready_search   ),
     .req_cmd             (req_cmd            ),
     .req_token           (req_token          ),
-    .req_data            (req_data           ),
+//    .req_data            (req_data           ),
     .cpl_valid           (cpl_valid_search   ),
     .cpl_ready           (cpl_ready          ),
     .cpl_data            (cpl_data_search    ),
     .cpl_status          (cpl_status_search  ),
     .search_valid        (search_valid       ),
     .search_ready        (search_ready       ),
-    .search_cmd          (search_cmd         ),
     .search_token        (search_token       ),
     .search_cpl_addr     (search_cpl_addr    ),
     .search_cpl_valid    (search_cpl_valid   ),
@@ -332,111 +331,7 @@ module bst_engine
     .mem_rd_data           (mem_rd_data          )
     );
 
-    // synthesis translate_off
-    `ifdef BSTER_LOGGER
-
-        engine_states fsm_insert_prev;
-        engine_states fsm_delete_prev;
-        engine_states fsm_search_prev;
-
-        integer log;
-        string fsm_state_str;
-        string cmd_str;
-        integer wrix;
-        integer rdix;
-        logic   aresetn_prev;
-
-        // Create the log skeleton
-        initial begin
-            // Write a log from scratch
-            log = $fopen("bster.log", "w");
-            $fclose(log);
-            // Write headers
-            `LOG_HEADER
-            // Log FSM default states
-            `LOG_FSM("Insert Engine", "IDLE");
-            `LOG_FSM("Search Engine", "IDLE");
-            `LOG_FSM("Delete Engine", "IDLE");
-        end
-
-        // Log reset assertion & deassertion
-        always @ (posedge aclk or negedge aresetn) begin
-
-            aresetn_prev <= aresetn;
-
-            if (aresetn == 1'b1 && aresetn_prev == 1'b0) begin
-                `LOG_RESET_DEASSERTION;
-                `LOG_HEADER
-            end
-            else if (aresetn == 1'b0 && aresetn_prev == 1'b1) begin
-                `LOG_RESET_ASSERTION;
-            end
-
-        end
-
-        // Log interface request
-        always @ (posedge aclk or negedge aresetn) begin
-            if (req_valid && req_ready) begin
-                `DEC_CMD(req_cmd);
-                `LOG_REQUEST(cmd_str, req_token, req_data);
-            end
-
-            if (cpl_valid && cpl_ready) begin
-                `LOG_COMPLETION(cpl_data, cpl_status);
-            end
-
-        end
-
-        // Log FSMs state when changing
-        always @ (posedge aclk or negedge aresetn) begin
-            if (aresetn == 1'b0) begin
-                fsm_insert_prev <= IDLE;
-                fsm_delete_prev <= IDLE;
-                fsm_search_prev <= IDLE;
-            end
-            else begin
-                fsm_insert_prev <= fsm_insert;
-                fsm_delete_prev <= fsm_delete;
-                fsm_search_prev <= fsm_search;
-            end
-
-            if (fsm_search != fsm_search_prev) begin
-                `DEC_FSM(fsm_search);
-                `LOG_FSM("Search Engine", fsm_state_str);
-            end
-            if (fsm_insert != fsm_insert_prev) begin
-                `DEC_FSM(fsm_insert);
-                `LOG_FSM("Insert Engine", fsm_state_str);
-            end
-            if (fsm_delete != fsm_delete_prev) begin
-                `DEC_FSM(fsm_delete);
-                `LOG_FSM("Delete Engine", fsm_state_str);
-            end
-
-        end
-
-        // Log memory access
-        always @ (posedge aclk or negedge aresetn) begin
-            if (mem_valid && mem_ready) begin
-                if (mem_wr) begin
-                    `LOG_MEM_WRITE(mem_addr, mem_wr_data);
-                end
-                else begin
-                    `LOG_MEM_READ(mem_addr);
-                end
-            end
-
-        end
-
-        // Log memory completion
-        always @ (posedge aclk or negedge aresetn) begin
-            if (mem_rd_valid && mem_rd_ready) begin
-                `LOG_MEM_COMPLETION(mem_rd_data);
-            end
-        end
-
-    `endif
-    // synthesis translate_on
+   
 
 endmodule
 

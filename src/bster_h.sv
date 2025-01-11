@@ -233,7 +233,7 @@ typedef enum logic[`FSM_WIDTH-1:0] {
 
 // Address of first RAM line
 `define RAM_BASE_ADDRESS   0
-`define RAM_BASE_ADDRESS_W (`CSR_DATA_WIDTH * 2)
+`define RAM_BASE_ADDRESS_W (`CSR_DATA_WIDTH * 2)  //32
 
 // Max address in the RAM
 `define RAM_MAX_ADDRESS   (`RAM_BASE_ADDRESS + `RAM_BASE_ADDRESS_W)

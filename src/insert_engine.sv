@@ -25,7 +25,7 @@ module insert_engine
         // Width of wstrb (width of data bus in words)
         parameter RAM_STRB_WIDTH = (RAM_DATA_WIDTH/8),
         // Width of ID signal
-        parameter RAM_ID_WIDTH = 8
+        parameter RAM_ID_WIDTH = 8 
     )(
         input  wire                        aclk,
         input  wire                        aresetn,
@@ -39,7 +39,7 @@ module insert_engine
         input  wire [                 7:0] req_cmd,
         input  wire [     TOKEN_WIDTH-1:0] req_token,
         input  wire [   PAYLOAD_WIDTH-1:0] req_data,
-        // Completion interface
+        // Completion interface 
         output wire                        cpl_valid,
         input  wire                        cpl_ready,
         output wire [   PAYLOAD_WIDTH-1:0] cpl_data,
@@ -374,7 +374,7 @@ module insert_engine
                             update_parent <= 1'b1;
                             parent_addr <= addr;
                             fsm <= INSERT_TOKEN;
-                        end
+                        end 
                     end
                     // Is bigger than node's token
                     else if (token_store > rdnode_token) begin

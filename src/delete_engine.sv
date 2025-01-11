@@ -9,7 +9,7 @@
 
 // Engine managing the user request to operate over the tree. Rely on
 // memory driver to access the AXI4 RAM and tree space manager to get and free
-// address
+// address 
 
 module delete_engine
 
@@ -165,9 +165,9 @@ module delete_engine
             rdnode_info
            } = rddata;
 
-    assign rdnode_is_root = rdnode_info[2];
-    assign rdnode_has_left_child = rdnode_info[1];
-    assign rdnode_has_right_child = rdnode_info[0];
+    assign rdnode_is_root = rdnode_info[2];//判断是不是根节点
+      assign rdnode_has_left_child = rdnode_info[1];//判断有没有左子节点
+  assign rdnode_has_right_child = rdnode_info[0];//判断有没有右子节点
 
     // -------------------------------------------------------------------------
     // Memory requests to tree space manager
